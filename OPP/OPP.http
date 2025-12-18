@@ -1,0 +1,6 @@
+@OPP_HostAddress = http://localhost:5121
+
+GET {{OPP_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
