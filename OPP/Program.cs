@@ -1,44 +1,62 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
+using OPP.Application;
+using OPP.Domain.Data;
+using OPP.Domain.Features.Students;
+using OPP.Domain.Services;
+using OPP.Middlewares;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ISessionService,SessionsService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000", "http://192.168.68.109:3000", "http://backend.local:3000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
+builder.Services.AddAuthentication("Session")
+    .AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>("Session", options => { });
+
+builder.Services.AddAuthorization();
+
+builder.Services
+    .AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<InviteStudentUseCase>();
+builder.Services.AddScoped<LoginStudentUseCase>();
+builder.Services.AddScoped<AcceptInviteInProjectUseCase>();
+builder.Services.AddScoped<RegisterStudentUseCase>();
+builder.Services.AddScoped<GetAllStudentsUseCase>();
+builder.Services.AddScoped<GetStudentByIdUseCase>();
+builder.Services.AddScoped<GetStudentByEmailUseCase>();
+builder.Services.AddScoped<DeleteStudentFromProjectUseCase>();
+builder.Services.AddScoped<GetStudentUseCase>();
+builder.Services.AddScoped<SubjectsService>();
+builder.Services.AddScoped<ProjectsService>();
+builder.Services.AddScoped<ProjectTasksService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddDbContext<GantaDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DebugConnection")));
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseCors("AllowAll"); 
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseAuthentication(); 
+app.UseAuthorization();  
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+app.MapControllers();
+app.Run("http://0.0.0.0:5000");

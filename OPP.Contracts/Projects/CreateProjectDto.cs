@@ -1,6 +1,8 @@
 ﻿namespace OPP.Contracts.Projects;
 
-public class CreateProjectDto
-{
-    
-}
+public record CreateProjectDto(
+    string Name,
+    string Description,
+    DateTime Deadline,
+    Guid CreatorId,
+    string SubjectName);

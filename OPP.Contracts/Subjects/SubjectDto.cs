@@ -1,6 +1,3 @@
 ﻿namespace OPP.Contracts.Subjects;
 
-public class SubjectDto
-{
-    
-}
+public record SubjectDto(Guid Id, string Name);

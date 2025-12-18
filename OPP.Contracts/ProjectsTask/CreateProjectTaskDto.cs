@@ -1,6 +1,10 @@
 ﻿namespace OPP.Contracts.ProjectsTask;
 
-public class CreateProjectTaskDto
-{
+public record CreateProjectTaskDto(
+    string Name,
+    string Result,
+    DateTimeOffset Deadline,
+    Guid ProjectId,
+    Guid ResponsibleStudentId,
+    Guid? DependentTaskId);
     
-}

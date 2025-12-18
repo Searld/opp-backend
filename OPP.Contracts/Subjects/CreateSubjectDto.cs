@@ -1,6 +1,3 @@
 ﻿namespace OPP.Contracts.Subjects;
 
-public class CreateSubjectDto
-{
-    
-}
+public record CreateSubjectDto(string Name, Guid CreatorId);

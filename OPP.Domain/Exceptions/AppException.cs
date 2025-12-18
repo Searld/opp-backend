@@ -1,6 +1,14 @@
 ﻿namespace OPP.Domain.Exceptions;
 
-public class AppException
+public class AppException : Exception
 {
+    public int StatusCode { get; }
+    public string ErrorCode { get; }
     
+    protected AppException(int statusCode, string errorCode, string message)
+        : base(message)
+    {
+        StatusCode = statusCode;
+        ErrorCode = errorCode;
+    }
 }

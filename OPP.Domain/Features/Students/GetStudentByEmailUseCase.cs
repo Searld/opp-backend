@@ -4,11 +4,11 @@ using OPP.Domain.Exceptions;
 
 namespace OPP.Domain.Features.Students;
 
-public class GetStudentByEmail
+public class GetStudentByEmailUseCase
 {
     private readonly GantaDbContext _context;
 
-    public GetStudentByEmail(GantaDbContext context)
+    public GetStudentByEmailUseCase(GantaDbContext context)
     {
         _context = context;
     }
@@ -24,7 +24,7 @@ public class GetStudentByEmail
             student.FirstName,
             student.LastName,
             student.Email,
-            student.ProjectId,
+            student.Projects.Select(p => p.Id).ToList(),
             student.ProjectTasks.Select(pt=> pt.Id).ToList());
     }
 }

@@ -1,6 +1,13 @@
-﻿namespace OPP.Contracts.Projects;
+﻿using OPP.Contracts.ProjectsTask;
 
-public class ProjectDtp
-{
-    
-}
+namespace OPP.Contracts.Projects;
+
+public record ProjectDto(
+    Guid Id,
+    string Name,
+    string Description,
+    DateTimeOffset Deadline,
+    List<Guid> Tasks,
+    List<Guid> Members,
+    string? SubjectName,
+    Guid? CreatorId);

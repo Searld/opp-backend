@@ -1,3 +1,6 @@
 ﻿namespace OPP.Contracts.Student;
 
-public record DeleteStudentFromProjectDto();
+public record DeleteStudentFromProjectDto(
+    Guid ProjectId,
+    Guid StudentId,
+    Guid DeletedById);
