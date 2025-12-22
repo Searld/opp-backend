@@ -16,14 +16,14 @@ public class ExceptionHandlingMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        //try
-        //{
+        try
+        {
             await _next(context);
-        //}
-        //catch (Exception ex)
-        //{
-          //  await HandleExceptionAsync(context, ex);
-        //}
+        }
+        catch (Exception ex)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
     }
 
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)

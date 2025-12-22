@@ -2,5 +2,4 @@
 
 public record DeleteStudentFromProjectDto(
     Guid ProjectId,
-    Guid StudentId,
-    Guid DeletedById);
+    Guid StudentId);

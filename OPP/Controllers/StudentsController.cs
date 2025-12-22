@@ -91,9 +91,7 @@ public class StudentsController : Controller
         [FromBody] DeleteStudentFromProjectDto dto)
     {
         var currentStudentId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        if(currentStudentId != dto.DeletedById)
-            return Forbid();
-        await useCase.Execute(dto);
+        await useCase.Execute(dto, currentStudentId);
         return Ok();
     }
 }

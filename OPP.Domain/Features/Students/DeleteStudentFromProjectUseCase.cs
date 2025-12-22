@@ -14,13 +14,13 @@ public class DeleteStudentFromProjectUseCase
         _context = context;
     }
 
-    public async Task Execute(DeleteStudentFromProjectDto dto)
+    public async Task Execute(DeleteStudentFromProjectDto dto, Guid deletedBy)
     {
         var project = await _context.Projects.Include(p=>p.Members)
             .FirstOrDefaultAsync(p=> p.Id == dto.ProjectId);
         if (project == null)
             throw new NotFoundException(nameof(Project), dto.ProjectId);
-        if (project.CreatorId != dto.DeletedById)
+        if (project.CreatorId != deletedBy)
             throw new PermissionException();
         if(!project.Members.Select(x => x.Id).Contains(dto.StudentId))
             throw new NotFoundException(nameof(Student), dto.StudentId);
