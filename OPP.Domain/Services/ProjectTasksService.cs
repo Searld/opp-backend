@@ -45,7 +45,15 @@ public class ProjectTasksService
         if(projectTask == null)
             throw new NotFoundException(nameof(ProjectTask), taskId);
         _context.ProjectTasks.Remove(projectTask);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 
     public async Task UpdateTask(EditProjectTaskDto task)

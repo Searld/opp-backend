@@ -65,6 +65,14 @@ public class ProjectsController : Controller
         return Ok(await _projectsService.GetAllProjectsAsync());
     }
 
+    [Authorize]
+    [HttpPatch]
+    public async Task<IActionResult> UpdateProject(UpdateProjectDto dto)
+    {
+        await _projectsService.UpdateAsync(dto);
+        return Ok();
+    }
+    
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {

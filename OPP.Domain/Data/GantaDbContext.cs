@@ -26,7 +26,7 @@ public class GantaDbContext(DbContextOptions<GantaDbContext> options) : DbContex
             builder.HasOne(t => t.DependentTask)
                 .WithMany(t => t.Prerequisites)
                 .HasForeignKey(t => t.DependentTaskId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             
             builder.HasOne<Student>()                
                 .WithMany(s => s.ProjectTasks)    

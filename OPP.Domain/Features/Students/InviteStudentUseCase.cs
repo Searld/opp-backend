@@ -1,5 +1,4 @@
-﻿using System.Net.Mail;
-using MailKit.Net.Smtp;
+﻿using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using OPP.Contracts.Student;
@@ -41,7 +40,8 @@ public class InviteStudentUseCase
         
         using (var smtp = new SmtpClient())
         {
-            await smtp.ConnectAsync("smtp.yandex.ru", 465, true);
+            await smtp.ConnectAsync("smtp.yandex.ru", 587, SecureSocketOptions.StartTls);
+            
             await smtp.AuthenticateAsync("salokrass", "jmqmfizwwiteoere");
 
             var bodyBuilder = new BodyBuilder();

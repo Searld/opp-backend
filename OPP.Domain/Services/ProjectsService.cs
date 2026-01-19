@@ -52,6 +52,18 @@ public class ProjectsService
         await _context.Projects.AddAsync(project);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(UpdateProjectDto dto)
+    {
+        var project =  await _context.Projects.FirstAsync(s => s.Id == dto.Id);
+        if(project == null)
+            throw new NotFoundException(nameof(Project), dto.Id);
+        project.Name = dto.Name ?? project.Name;
+        project.Description = dto.Description ?? project.Description;;
+        
+        _context.Projects.Update(project);
+        await _context.SaveChangesAsync();
+    }
     
     public async Task<ProjectDto> GetProjectByIdAsync(Guid id)
     {
